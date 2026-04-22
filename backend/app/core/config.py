@@ -4,6 +4,7 @@ from pydantic import Field
 class Settings(BaseSettings):
     host: str = "localhost"
     port: int = 8000
+    environment: str = "development"
     database_url: str
     frontend_url: str
 
