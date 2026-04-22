@@ -1,5 +1,5 @@
 from fastapi import APIRouter, HTTPException
-from app.models.schemas import AnalyzeRequest, AnalyzeResponse, WordWeight
+from app.schemas.analyze import AnalyzeRequest, AnalyzeResponse, WordWeight
 from app.services.scraper import fetch_article_text
 from app.services.nlp import extract_topics
 
