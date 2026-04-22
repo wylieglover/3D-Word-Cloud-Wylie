@@ -1,10 +1,17 @@
 from fastapi import FastAPI, Depends
+from contextlib import asynccontextmanager
 from app.dependencies.auth import verify_token
 from fastapi.middleware.cors import CORSMiddleware
 from app.routers import analyze, user
 from app.core.config import settings
+from app.db.init_db import init_db
 
-app = FastAPI()
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    await init_db()
+    yield
+
+app = FastAPI(lifespan=lifespan)
 
 app.add_middleware(
     CORSMiddleware,
