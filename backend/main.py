@@ -1,25 +1,21 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Depends
+from app.dependencies.auth import verify_token
 from fastapi.middleware.cors import CORSMiddleware
-from dotenv import load_dotenv
-from app.routers import analyze
-import os
-
-load_dotenv()
-
-HOST = os.getenv("HOST", "localhost")
-PORT = int(os.getenv("PORT", 8000))
+from app.routers import analyze, user
+from app.core.config import settings
 
 app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_origins=[settings.frontend_url],
+    allow_methods=["GET", "POST", "PUT"],
+    allow_headers=["Authorization", "Content-Type"],
 )
 
 @app.get("/health")
 async def health():
     return {"status": "ok"}
 
-app.include_router(analyze.router)
+app.include_router(user.router)
+app.include_router(analyze.router, prefix="/api", dependencies=[Depends(verify_token)])
