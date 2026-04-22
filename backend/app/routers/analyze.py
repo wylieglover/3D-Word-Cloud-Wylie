@@ -1,5 +1,5 @@
 from fastapi import APIRouter, HTTPException
-from app.schemas.analyze import AnalyzeRequest, AnalyzeResponse, WordWeight
+from app.schemas.analyze import AnalyzeRequest, AnalyzeResponse, WordWeightSchema
 from app.services.scraper import fetch_article_text
 from app.services.nlp import extract_topics
 
@@ -13,7 +13,7 @@ async def analyze(request: AnalyzeRequest):
             raise HTTPException(status_code=422, detail="Could not extract text from the provided URL")
         
         words = extract_topics(text)
-        return AnalyzeResponse(words=[WordWeight(**w) for w in words])
+        return AnalyzeResponse(words=[WordWeightSchema(**w) for w in words])
     
     except HTTPException:
         raise
