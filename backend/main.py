@@ -1,4 +1,5 @@
-from fastapi import FastAPI, Depends
+from fastapi import Request, FastAPI, Depends
+from fastapi.responses import JSONResponse
 from contextlib import asynccontextmanager
 from app.dependencies.auth import verify_token
 from fastapi.middleware.cors import CORSMiddleware
@@ -23,6 +24,11 @@ app.add_middleware(
 @app.get("/health")
 async def health():
     return {"status": "ok"}
+
+@app.exception_handler(Exception)
+async def global_exception_handler(request: Request, exc: Exception):
+    print(exc)
+    return JSONResponse(status_code=500, content={"detail": "Internal server error"})
 
 app.include_router(user.router)
 app.include_router(analyze.router, prefix="/api", dependencies=[Depends(verify_token)])
