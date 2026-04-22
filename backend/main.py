@@ -3,7 +3,7 @@ from fastapi.responses import JSONResponse
 from contextlib import asynccontextmanager
 from app.dependencies.auth import verify_token
 from fastapi.middleware.cors import CORSMiddleware
-from app.routers import analyze, user
+from app.routers import analyze, auth
 from app.core.config import settings
 from app.db.init_db import init_db
 
@@ -30,5 +30,5 @@ async def global_exception_handler(request: Request, exc: Exception):
     print(exc)
     return JSONResponse(status_code=500, content={"detail": "Internal server error"})
 
-app.include_router(user.router)
+app.include_router(auth.router, prefix="/api")
 app.include_router(analyze.router, prefix="/api", dependencies=[Depends(verify_token)])

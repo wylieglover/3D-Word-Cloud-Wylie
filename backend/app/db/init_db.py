@@ -1,6 +1,6 @@
 from app.db.base import Base
 from app.db.session import engine
-import app.models.user
+import app.models.auth
 import app.models.analyze
 
 async def init_db():
