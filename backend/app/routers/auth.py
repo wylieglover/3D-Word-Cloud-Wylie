@@ -39,7 +39,7 @@ async def register(request: AuthRequest, response: Response, db: AsyncSession = 
         key="refresh_token",
         value=refresh_token,
         httponly=True,
-        secure=True,
+        secure=settings.environment == "production",
         samesite="strict",
         max_age=settings.jwt_refresh_expire_minutes * 60
     )
@@ -71,7 +71,7 @@ async def login(request: AuthRequest, response: Response, db: AsyncSession = Dep
         key="refresh_token",
         value=refresh_token,
         httponly=True,
-        secure=True,
+        secure=settings.environment == "production",
         samesite="strict",
         max_age=settings.jwt_refresh_expire_minutes * 60
     )
